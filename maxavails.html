@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Thu, 18 Feb 2016 17:04:52 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://ak.quantcast.com/gn/2.55.20140903144332/stylesheets/headerfooter/headerfooter.css" type="text/css" media="all">
+    <title>Max Avails</title>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+</head>
+
+<body>
+    <nav id="masthead" data-behavior="sticky_header" class="page-header--scrolling">
+        <section class="main app">
+            <a id="Nav_Logo" href="#">Quantcast Home</a>
+            <div class="app-nav">
+                <a href="#" id="Nav_Menu_Measure" style="color: white" class="navigation selected">Max Available</a>
+               
+            </div>
+	</nav>
+	<div id="#" style="padding:100px 5px 5px 5px">
+	<div style="float:left;margin-right:20px">
+	Enter DMA or Zip Codes <br>
+	<textarea id="value" style="width:150px;height:500px;"></textarea>
+	</div>
+	<div style="float:left;">
+	Device Filter
+	<br>
+	Desktop<input id="desktop" type="checkbox" value="Desktop" />
+	Mobile<input id='mobile' type="checkbox" value="mobile" />
+	Tablet<input id="tablet" type="checkbox" value="tablet" />
+	<br>
+	<br>
+	
+	<br>
+	<br>
+	<button onclick="run()">click</button>
+	</div>
+	
+	<div>
+	
+<textarea id="qu" style="width:500px; height:500px;"></textarea>  
+ </div>
+
+
+<script>
+function run(){
+var device = '';
+var state=''
+
+
+//device filter
+if(document.getElementById('desktop').checked){
+var desk = "device like 'desktop'\n";
+}
+
+if(document.getElementById('mobile').checked){
+var mobile = "device like 'smart_phone'\n";
+}
+
+
+if(document.getElementById('tablet').checked){
+var tablet = "device like 'tablet'\n";
+}
+
+var devicearray =[desk,mobile,tablet];
+var devicearray = devicearray.filter(Boolean).join("OR ");
+console.log(devicearray);
+if(document.getElementById('desktop').checked){
+var device ="AND "+ devicearray
+} else {if(document.getElementById('mobile').checked){
+var device ="AND "+ devicearray
+} else{ if(document.getElementById('tablet').checked){
+var device ="AND "+ devicearray}
+}
+}
+
+
+//get values
+var val = document.getElementById('value').value;
+val = "'"+val.replace(/\n/g,"','")+"'";
+var filtercheck = document.getElementById('value').value;
+
+//check if DMA or Zip
+var filtercheck = filtercheck.split(/\n/g)[0].length
+console.log(filtercheck);
+if(filtercheck === 3){
+var filter = 'dma';
+} else {
+var filter = 'postal_code';
+}
+console.log(filter)
+
+
+//the query
+var query = "select\n";
+query +="date_trunc('day', hour) as day,\n"; 
+query +="sum(requests) as bid_requests,\n"; 
+query +="bidstate as bid_state,\n"; 
+query +="device as device,\n";
+query +="inventory_type as inventory,\n";
+query +="exchange as exchange,\n";
+query +="postal_code as zipcode\n";
+query +="from bidder_drilldown.last_2_days\n";
+query +="where "+filter+" in ("+val+")\n";
+query +=device
+query +="group by 1,3,4,5,6,7;\n";
+
+//write query
+document.getElementById('qu').textContent=query
+
+}
+</script>  
+
+  </body>
+</html>
