@@ -1,0 +1,131 @@
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+      <meta name="dcterms.created" content="Wed, 17 Feb 2016 18:37:24 GMT">
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+           <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+      <!--[if IE]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+      <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+      <link rel="stylesheet" href="https://ak.quantcast.com/gn/2.55.20140903144332/stylesheets/headerfooter/headerfooter.css" type="text/css" media="all">
+      <title>Count Of URL and Labels</title>
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      <script>
+         $(function() {
+           $( "#from" ).datepicker({
+             defaultDate: "+1w",
+             changeMonth: true,
+             numberOfMonths: 3,
+             onClose: function( selectedDate ) {
+               $( "#to" ).datepicker( "option", "minDate", selectedDate );
+             }
+           });
+           $( "#to" ).datepicker({
+             defaultDate: "+1w",
+             changeMonth: true,
+             numberOfMonths: 3,
+             onClose: function( selectedDate ) {
+               $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+             }
+           });
+         });
+          
+      </script>
+   </head>
+   <body>
+      <nav id="masthead" data-behavior="sticky_header" class="page-header--scrolling">
+         <section class="main app">
+         <a id="Nav_Logo" href="/measure/home">Quantcast Home</a>
+         <div class="app-nav">
+            <a href="#" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Query Generator</a>
+            <!--
+               <a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ejlIS3piU0dWdkU" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Event Count Generator</a>
+               <a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ZmdXdnVoMUNvRmM" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Multi Vendor Split Funnel Generator </a>
+               -->
+         </div>
+      </nav>
+      <div style="margin: 100px 5px 5px 5px">
+      	   <b>Timeframe</b>
+     	   				    <div>
+      							 <select onclick="showCal()" id="time">
+         						 <option value="yesterday">Yesterday</option>
+         						 <option value="mtd">Month To Date</option>
+         						 <option value="custom">Custom</option>
+      							 </select>
+      							 		  <div id="cal" style="display:none;">
+         								  <label for="from">From</label>
+        								  <input type="text" id="from" name="from">
+         								  <label for="to">to</label>
+         								  <input type="text" id="to" name="to">
+      									  </div>
+	  						</div>
+	  						<b>Pcode</b>
+      									<div>
+										<input type="text" id="pcode" />
+      									</div>
+										<input id="default" type="checkbox" value="Default Only" />Default Only
+										<br>
+							<div><button onclick="run()">GENERATE</button></div>
+	</div>
+	  
+      <script>
+         function showCal(){
+         var timeSelected = document.getElementById('time');
+         var timeSelected = timeSelected.options[time.selectedIndex].value;
+         if (timeSelected == "custom"){
+            document.getElementById('cal').style.display = "inline";
+         } else {
+         document.getElementById('cal').style.display = "none";
+         }
+         };
+		 </script>
+		
+               
+      </script>
+	<textarea id="query" style="width:98%; height:325px"></textarea>
+	
+	 <script>
+		 function run(){
+		 var time = document.getElementById("time").value;
+		 console.log(time);
+		 var pcode = document.getElementById("pcode").value;
+		 console.log(pcode);
+		 if(document.getElementById("default").checked){
+		 
+		  var qsql = "SELECT\n";
+		 qsql += "label as label,\n";
+		 qsql += "getURL(url, referrer) as URL,\n";
+		 qsql += "COUNT (*)\n";
+		 qsql += "FROM prod_drilldown_pixel_hourly_events."+time+"\n";
+		 qsql += "WHERE qaccount = '"+pcode+"'\n";
+		 qsql += "and label like '%Default%'\n";
+		 qsql += "GROUP BY 2,1\n";
+		 qsql += ";"
+		 
+		 }else{
+		 
+		 var qsql = "SELECT\n";
+		 qsql += "label as label,\n";
+		 qsql += "getURL(url, referrer) as URL,\n";
+		 qsql += "COUNT (*)\n";
+		 qsql += "FROM prod_drilldown_pixel_hourly_events."+time+"\n";
+		 qsql += "WHERE qaccount = '"+pcode+"'\n";
+		 qsql += "GROUP BY 2,1\n";
+		 qsql += ";"
+		 }
+
+		 document.getElementById("query").textContent=qsql;
+		 }
+		 
+		 
+		
+		 </script>
+               
+	
+   </body>
+</html>

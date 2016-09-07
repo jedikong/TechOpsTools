@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+      <meta name="dcterms.created" content="Wed, 17 Feb 2016 18:37:24 GMT">
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+           <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+      <!--[if IE]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+      <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+      <link rel="stylesheet" href="https://ak.quantcast.com/gn/2.55.20140903144332/stylesheets/headerfooter/headerfooter.css" type="text/css" media="all">
+      <title>Custom Tag Generator</title>
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+ </head>
+   <body>
+      <nav id="masthead" data-behavior="sticky_header" class="page-header--scrolling">
+         <section class="main app">
+         <a id="Nav_Logo" href="/measure/home">Quantcast Home</a>
+         <div class="app-nav">
+            <a href="#" id="Nav_Menu_Measure" style="color: white" class="navigation selected">Custom Tag Generator</a>
+            <!--
+               <a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ejlIS3piU0dWdkU" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Event Count Generator</a>
+               <a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ZmdXdnVoMUNvRmM" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Multi Vendor Split Funnel Generator </a>
+               -->
+         </div>
+      </nav>
+
+<div id="lab" style="float:left; margin-top:100px; margin-left:5px">
+<form onsubmit="return pcodecheck()">
+P-Code
+<br>
+<input id="pcode" name="pcode" type="text" required="flag" />
+<br>
+<br>
+
+<input id="imgonly" type="checkbox" />
+Img Tags Only
+<br>
+<br>
+Labels
+<br>
+<textarea name="labels" style="width:300px; height:500px" id="labels"></textarea>
+
+<br>
+<input type="Submit" />
+</form>
+</div>
+
+
+<div id="tagsarea" style="display:none; margin-top:100px; margin-left:5px">
+Tags
+<br>
+<textarea style="width:90%; height:600px;" id="tags"></textarea>
+<br>
+<button onclick="save()">Save</button>
+</div>
+
+
+
+<script>
+
+function pcodecheck(){
+var pcode = $('#pcode').val()
+
+console.log(imgonly)
+if(pcode.length === 15){
+tags()
+} else {
+alert("Not Valid P-Code")
+}
+
+  return false;
+};
+
+
+function tags(){
+var pcode = $('#pcode').val()
+var tag = "";
+var labels = $('#labels').val();
+console.log(labels);
+var labels = labels.split(/\n/);
+var labels = labels.filter(Boolean);
+var labelslength =  labels.length;
+console.log(labels);
+
+console.log($('#imgonly').prop('checked'));
+if($('#imgonly').prop('checked')){
+
+for(i=0; i < labelslength; i++) {
+tag += labels[i] + "\n\n";
+tag += "<img src='//pixel.quantserve.com/pixel/"+pcode+".gif?labels=_fp.event."+labels[i]+"' style='display: none;' border='0' height='1' width='1' alt='Quantcast'/>\n";
+tag += "\n----------------------------------------\n"
+}
+
+} else {
+
+for(i=0; i < labelslength; i++) {
+
+tag += labels[i] + "\n\n";
+tag += "<!-- Start Quantcast Tag -->\n";
+tag += "<script type='text/javascript'>\n";
+tag += "var _qevents = _qevents || [];\n";
+tag += "(function() {\n";
+tag += "var elem = document.createElement('script');\n";
+tag += "elem.src = (document.location.protocol == 'https:' ? 'https://secure' : 'http://edge') + '.quantserve.com/quant.js';\n";
+tag += "elem.async = true;\n";
+tag += "var scpt = document.getElementsByTagName('script')[0];\n";
+tag += "scpt.parentNode.insertBefore(elem, scpt);\n";
+tag += "})();\n";
+tag += "\n";
+tag += "_qevents.push(\n";
+tag += "{qacct:'"+pcode+"',labels:'_fp.event."+labels[i]+"',event:'refresh'}\n";
+tag += ");\n";
+tag += "<\/script>\n";
+tag += "<noscript>\n";
+tag += "<img src='//pixel.quantserve.com/pixel/"+pcode+".gif?labels=_fp.event."+labels[i]+"' style='display: none;' border='0' height='1' width='1' alt='Quantcast'/>\n";
+tag += "<\/noscript>\n";
+tag += "<!-- End Quantcast tag -->\n";
+tag += "\n----------------------------------------\n"
+
+}
+}
+
+document.getElementById("tags").innerHTML = tag;
+$("#lab").hide();
+$("#tagsarea").show()
+  return false;
+}
+</script>
+
+<script>
+//Date
+var a= new Date();
+var date = a.getDate();
+var month = a.getMonth();
+var year = a.getYear();
+
+</script>
+
+
+<script type="text/javascript">
+//Save
+
+            function save() {
+			var pcode = $('#pcode').val()
+                var a = document.createElement('a');
+                with (a) {
+                    href='data:text/csv;base64,' + btoa(document.getElementById('tags').value);
+                    download=pcode+'_'+month+date+year+'_tags.txt';
+                }
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        </script>
+
+
+  </body>
+</html>
+

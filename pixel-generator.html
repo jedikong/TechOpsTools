@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 24 Apr 2015 22:57:38 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+<meta charset="utf-8">
+  <title>QSQL Generator</title>
+  <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script>
+  $(function() {
+    $( "#from" ).datepicker({
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 3,
+      onClose: function( selectedDate ) {
+        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+      }
+    });
+    $( "#to" ).datepicker({
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 3,
+      onClose: function( selectedDate ) {
+        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+      }
+    });
+  });
+   </script>
+<link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://ak.quantcast.com/gn/2.55.20140903144332/stylesheets/headerfooter/headerfooter.css" type="text/css" media="all">
+    <title>QSQL Generator</title>
+	    
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<nav id="masthead" data-behavior="sticky_header" class="page-header--scrolling">
+<section class="main app">
+<a id="Nav_Logo" href="/measure/home">Quantcast Home</a>
+<div class="app-nav">
+<a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ejlIS3piU0dWdkU" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Query Generator</a>
+<!--
+<a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ejlIS3piU0dWdkU" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Event Count Generator</a>
+<a href="https://www.googledrive.com/host/0By-Yjv0ec5-5ZmdXdnVoMUNvRmM" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Multi Vendor Split Funnel Generator </a>
+-->
+</div>
+</nav>
+
+<div style="margin: 100px 5px 5px 5px">
+<b>Timeframe</b>
+		 <div>
+		 <select onclick="showCal()" id="time">
+		 <option value="today">Today</option>
+		 <option value="yesterday">Yesterday</option>
+		 <option value="mtd">Month To Date</option>
+		 <option value="custom">Custom</option>
+		 </select>
+		 <div id="cal" style="display:none;">
+		<label for="from">From</label>
+<input type="text" id="from" name="from">
+<label for="to">to</label>
+<input type="text" id="to" name="to">
+ 
+		 </div>
+		 <script>
+		 function showCal(){
+		 var timeSelected = document.getElementById('time');
+		 var timeSelected = timeSelected.options[time.selectedIndex].value;
+		 if (timeSelected == "custom"){
+		    document.getElementById('cal').style.display = "inline";
+			} else {
+			document.getElementById('cal').style.display = "none";
+			}
+			};
+			
+		 
+		 </script>
+
+</div>
+<div style="margin:5px">
+<b>Column</b>
+		 <div>
+		 	  <input checked="" id="columnPcode" type="checkbox" name="Column" value="pcode">pcode<br>
+			  <input id="columnTimeStamp" type="checkbox" name="Column" value="timestamp">timestamp - Date with Time<br>
+			  <input checked="" id="columnDate" type="checkbox" name="Column" value="date">date<br>
+			  <input checked="" id="columnLabel" type="checkbox" name="Column" value="label">label<br>
+			  <input checked="" id="columnURL" type="checkbox" name="Column" value="url">URL<br>
+			  <input checked="" id="columnReferrer" type="checkbox" name="Column" value="referrer">Referrer<br>
+			  <input id="columnReferrer2" type="checkbox" name="Column" value="referrer">Referrer - for when implemented within iFrame<br>
+			  <input id="columnPixelURL" type="checkbox" name="Column" value="PixelURL">Pixel URL<br>
+			  <input id="columnUA" type="checkbox" name="Column" value="UA">User Agent String<br>
+		 	  <input id="columnIP" type="checkbox" name="Column" value="ip">IP<br>
+			  <input id="columnDMA" type="checkbox" name="Column" value="dma">DMA<br>
+			  <input id="columnCity" type="checkbox" name="Column" value="city">City<br>
+		 	  <input id="columnCountry" type="checkbox" name="Column" value="Country">Country<br>
+			  <input id="ColumnState" type="checkbox" name="Column" value="State">State<br>
+			  <input id="ColumnCookieID" type="checkbox" name="Column" value="CookieID">CookieID<br>
+			  <input checked="" id="ColumnOrderID" type="checkbox" name="Column" value="OrderID">OrderID<br>
+			  <input checked="" id="ColumnRev" type="checkbox" name="Column" value="Revenue">Revenue<br>					  			  
+		</div>
+</div>
+<div style="margin:5px">
+<b>Filters</b>
+	   <div>
+	   
+<div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table width="300px" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+<tr valign="top">
+	<td style="border-width : 0px;">P-Code:<br />
+	</td>
+	<td style="border-width : 0px;"><input id="pcode" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Label:<br />
+	</td>
+	<td style="border-width : 0px;"><input id="label" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">DMA:<br />
+	</td>
+	<td style="border-width : 0px;"><input id="dma" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">City:<br />
+	</td>
+	<td style="border-width : 0px;"><input id="city" type="text" name="Filters"><br />
+	</td>
+	</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Country<br />
+	</td>
+	<td style="border-width : 0px;"><input id="country" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">State:<br />
+	</td>
+	<td style="border-width : 0px;"><input id="state" type="text" name="Filters"><br />
+	</td>
+	</tr>
+</table>
+<br>
+<input id="nolabels" type="checkbox" name="nolabels" />No Event Labels
+<br>
+<br>
+<button onclick ="generate()" >GENERATE</button><br><br>
+<textarea style="width:100%; height:325px" id="query">
+</textarea>
+</div>
+<script>
+//column to appear in query
+
+function generate(){
+
+//logic for qsql table based on if there event labels or not
+if(document.getElementById('nolabels').checked){
+var qsqltabel = "pixel.";
+var qsqlqaccount = "getQAccount(url)";
+var qsqllabel = "decodeURL(getLabel(url))";
+} else {
+var qsqltabel = "prod_drilldown_pixel_hourly_events.";
+var qsqlqaccount = "qaccount";
+var qsqllabel ="label";
+}
+
+var filterpcode = document.getElementById("pcode").value;
+var filterlabel = document.getElementById("label").value;
+var filterdma = document.getElementById("dma").value;
+var filtercity = document.getElementById("city").value;
+var filtercountry = document.getElementById("country").value;
+var filterstate = document.getElementById("state").value;
+
+		if(filterpcode !== ""){
+					   var fpcode = qsqlqaccount+" = '"+filterpcode+"'\n"
+					   }
+		if(filterlabel !== ""){
+					   var flabel = qsqllabel+" like '%"+filterlabel+"%'\n"
+					   }
+		if(filterdma !== ""){
+					 	 var fdmda = "fetchKVClobValue(kvclob, 'dma') like '%"+filterdma+"%'\n" 
+						 }
+		if(filtercity !== ""){
+					 	 var fcity = "fetchKVClobValue(kvclob, 'l') like '%"+filtercity+"%'\n"
+						 }		
+		if(filtercountry !== ""){
+						var fcountry = "fetchKVClobValue(kvclob, 'c') like '%"+filtercountry+"%'\n"	
+						}
+		if(filterstate !== ""){
+					   var fstate = "fetchKVClobValue(kvclob, 'st') like '%"+filterstate+"%'\n"	
+					   }
+		 //get time option
+		 var timeSelected = document.getElementById('time');
+		 var timeSelected = timeSelected.options[time.selectedIndex].value;
+		 var startDate = document.getElementById('from').value.split('/');
+		 var endDate = document.getElementById('to').value.split('/');
+		 console.log(timeSelected);
+		 if (timeSelected == "custom"){
+		 	var dateRange = 's'+startDate[2]+startDate[0]+startDate[1]+'.e'+endDate[2]+endDate[0]+endDate[1];
+			}else {
+			var dateRange = timeSelected;
+			}
+			console.log(dateRange);
+		
+		
+		//column to appear in query
+		if (document.getElementById('columnPcode').checked){
+		var qsqlcolumnpcode = qsqlqaccount+" as pcode\n";
+		console.log(qsqlcolumnpcode);
+		};
+  
+  		if (document.getElementById('columnTimeStamp').checked){
+		var qsqlcolumntime = "formatfullTime(time) as Time\n";
+		console.log(qsqlcolumntime);
+		};
+
+		if (document.getElementById('columnDate').checked){
+		var qsqlcolumnDate = "formatTime(time) as date\n";
+		console.log(qsqlcolumnDate);
+		};
+		
+		if (document.getElementById('columnLabel').checked){
+		var qsqlcolumnLabel = qsqllabel+" as label\n";
+		console.log(qsqlcolumnLabel);
+		};
+
+		if (document.getElementById('columnURL').checked){
+		var qsqlcolumnURL = "getURL(url, referrer) as URL\n";
+		console.log(qsqlcolumnURL);
+		};		
+
+		if (document.getElementById('columnReferrer').checked){
+		var qsqlcolumnRef = "getRef(url) as Ref\n";
+		console.log(qsqlcolumnRef);
+		};
+
+		if (document.getElementById('columnReferrer2').checked){
+		var qsqlcolumnRef2 = "referrer as Ref2\n";
+		console.log(qsqlcolumnRef2);
+		};
+
+		if (document.getElementById('columnIP').checked){
+		var qsqlcolumnIP = "fetchKVClobValue(kvclob, 'ip') as IP\n";
+		console.log(qsqlcolumnIP);
+		};
+
+		if (document.getElementById('columnDMA').checked){
+		var qsqlcolumnDMA = "fetchKVClobValue(kvclob, 'dma') as DMA\n";
+		console.log(qsqlcolumnDMA);
+		};
+
+		if (document.getElementById('columnCity').checked){
+		var qsqlcolumnCity = "fetchKVClobValue(kvclob, 'l') as City\n";
+		console.log(qsqlcolumnCity);
+		};
+
+		if (document.getElementById('ColumnState').checked){
+		var qsqlcolumnState = "fetchKVClobValue(kvclob, 'st') as State\n";
+		console.log(qsqlcolumnState);
+		};
+
+		if (document.getElementById('columnCountry').checked){
+		var qsqlcolumnCountry = "fetchKVClobValue(kvclob, 'c') as Country\n";
+		console.log(qsqlcolumnCountry);
+		};
+
+		if (document.getElementById('ColumnCookieID').checked){
+		var qsqlcolumncookieID = "CONCAT('/p/mc/', COALESCE(getCookieInOrOutMC(cookieIn), getCookieInOrOutMC(cookieSet) ) ) as cookieID\n";
+		console.log(qsqlcolumncookieID);
+		};
+
+		if (document.getElementById('ColumnOrderID').checked){
+		var qsqlcolumnOrderID = "getOrderID(url) as OrderID\n";
+		console.log(qsqlcolumnOrderID);
+		};
+
+		if (document.getElementById('ColumnRev').checked){
+		var qsqlcolumnrev = "getRevenue(url) as Revenue\n";
+		console.log(qsqlcolumnrev);
+		};
+				if (document.getElementById('columnUA').checked){
+		var qsqlcolumnua = "userAgent as userAgent\n";
+		console.log(qsqlcolumnua);
+		};
+				if (document.getElementById('columnPixelURL').checked){
+		var qsqlcolumnpixelURL = "url as url\n";
+		console.log(qsqlcolumnpixelURL);
+		};
+
+		var columnArray = [qsqlcolumnpcode,qsqlcolumntime,qsqlcolumnDate,qsqlcolumnLabel,qsqlcolumnURL,qsqlcolumnRef,qsqlcolumnRef2,qsqlcolumnpixelURL,qsqlcolumnua,qsqlcolumnIP,qsqlcolumnDMA,qsqlcolumnCity,qsqlcolumnState,qsqlcolumnCountry,qsqlcolumncookieID,qsqlcolumnOrderID,qsqlcolumnrev];
+		var columnArray = columnArray.filter(Boolean).join();
+		console.log(columnArray);
+
+		//filters
+		var fitlerArray = [fpcode,flabel,fdmda,fcity,fcountry,fstate];
+		var fitlerArray = fitlerArray.filter(Boolean).join("AND ");
+		console.log(fitlerArray);
+					   
+		//write query in box
+		var qsqlquery = "SELECT\n"+columnArray;
+		qsqlquery+="FROM "+qsqltabel+dateRange;
+		qsqlquery+="\nWHERE "+fitlerArray+";"
+
+		document.getElementById("query").textContent=qsqlquery;
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

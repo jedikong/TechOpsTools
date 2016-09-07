@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 24 Apr 2015 22:57:38 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+<meta charset="utf-8">
+  <title>QSQL Generator</title>
+  <link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script>
+  $(function() {
+    $( "#from" ).datepicker({
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 3,
+      onClose: function( selectedDate ) {
+        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+      }
+    });
+    $( "#to" ).datepicker({
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 3,
+      onClose: function( selectedDate ) {
+        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+      }
+    });
+  });
+   </script>
+<link rel="shortcut icon" href="//ak.quantcast.com/images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://ak.quantcast.com/gn/2.55.20140903144332/stylesheets/headerfooter/headerfooter.css" type="text/css" media="all">
+    <title>QSQL Generator</title>
+
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<nav id="masthead" data-behavior="sticky_header" class="page-header--scrolling">
+<section class="main app">
+<a id="Nav_Logo" href="/measure/home">Quantcast Home</a>
+<div class="app-nav">
+<a href="#" id="Nav_Menu_Measure" style="color: white" class="navigation selected">QSQL Drilldown Query Generator</a>
+</div>
+</nav>
+
+<div style="margin: 100px 5px 5px 5px">
+<b>Timeframe</b>
+		 <div>
+		 <select onclick="showCal()" id="time">
+
+		 <option value="yesterday">Yesterday</option>
+		 <option selected="flag" value="mtd">Month To Date</option>
+		 <option value="custom">Custom</option>
+		 </select>
+		 <div id="cal" style="display:none;">
+		<label for="from">From</label>
+<input type="text" id="from" name="from">
+<label for="to">to</label>
+<input type="text" id="to" name="to">
+
+		 </div>
+		 <script>
+		 function showCal(){
+		 var timeSelected = document.getElementById('time');
+		 var timeSelected = timeSelected.options[time.selectedIndex].value;
+		 if (timeSelected == "custom"){
+		    document.getElementById('cal').style.display = "inline";
+			} else {
+			document.getElementById('cal').style.display = "none";
+			}
+			};
+
+
+		 </script>
+
+</div>
+<div style="margin:5px">
+<b>Column</b>
+		 <div>
+		 	  <input checked="" id="columndate" type="checkbox" name="Column" value="date">Date<br>
+			  <input id="columnts" type="checkbox" name="Column" value="timestamp">TimeStamp<br>
+		 	  <input checked="" id="columncamp" type="checkbox" name="Column" value="Campaign">Campaign<br>
+			  <input id="columnlt" type="checkbox" name="Column" value="Line Item">Line Item<br>
+			  <input id="columncreative" type="checkbox" name="Column" value="Creative">Creative<br>
+			  <input checked="" id="columnexech" type="checkbox" name="Column" value="Exechange">Exechange<br>
+			  <input checked="" id="columnsite" type="checkbox" name="Column" value="site">Site<br>
+			  <input id="columnip" type="checkbox" name="Column" value="IP">IP<br>
+			  <input id="columnua" type="checkbox" name="Column" value="User Agent">User Agent<br>
+			  <input id="columnpc" type="checkbox" name="Column" value="Postal Code">Postal Code<br>
+			  <input id="columncity" type="checkbox" name="Column" value="City">City<br>
+			  <input id="columndma" type="checkbox" name="Column" value="DMA">DMA<br>
+			  <input id="columnregion" type="checkbox" name="Column" value="region">Region/State<br>
+			  <input id="columnc" type="checkbox" name="Column" value="country">Country<br>
+			  <input checked="" id="columnimp" type="checkbox" name="Column" value="Impressions">Impressions<br>
+			  <input checked="" id="columnclick" type="checkbox" name="Column" value="Clicks">Clicks<br>
+			  <input id="columnvt" type="checkbox" name="Column" value="ViewThroughConversion">View Through Conversions<br>
+			  <input id="columnct" type="checkbox" name="Column" value="ClickThroughConversion">Click Through Conversions<br>
+			  <input id="columnconversion" type="checkbox" name="Column" value="Conversion">All Conversions<br>
+
+		</div>
+</div>
+<div style="margin:5px">
+<b>Filters</b>
+	   <div>
+
+<div style=" text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+<table width="auto" border="0" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+<tr valign="top">
+	<td style="border-width : 0px;">P-Code<br />
+	</td>
+	<td style="border-width : 0px;"><input id="pcode" type="text" name="Filters" required="flag"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Campaign<br />
+	</td>
+	<td style="border-width : 0px;"><input id="campaign" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Line Item<br />
+	</td>
+	<td style="border-width : 0px;"><input id="lineitem" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Site<br />
+	</td>
+	<td style="border-width : 0px;"><input id="site" type="text" name="Filters"><br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Creative ID<br />
+	</td>
+	<td style="border-width : 0px;"><input id="creative" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Postal Code<br />
+	</td>
+	<td style="border-width : 0px;"><input id="postal" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">City<br />
+	</td>
+	<td style="border-width : 0px;"><input id="city" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">DMA<br />
+	</td>
+	<td style="border-width : 0px;"><input id="dma" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Region/State<br />
+	</td>
+	<td style="border-width : 0px;"><input id="region" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+<tr valign="top">
+	<td style="border-width : 0px;">Country<br />
+	</td>
+	<td style="border-width : 0px;"><input id="country" type="text" name="Filters"> For Multiple Values Insert Comma Seperated List<br />
+	</td>
+</tr>
+
+
+
+</table>
+<br>
+<br>
+<br>
+<button onclick ="check()" >GENERATE</button><br><br>
+<textarea style="width:100%; height:325px" id="query">
+</textarea>
+</div>
+<script>
+//column to appear in query
+
+function check(){
+var filterpcode = document.getElementById("pcode").value;
+
+if(filterpcode == ""){
+alert("Insert P-code")
+} else {
+generate()
+}
+};
+
+function generate(){
+
+
+
+
+var filtercampaign = document.getElementById("campaign").value;
+var filterlineitem = document.getElementById("lineitem").value;
+var filtersite = document.getElementById("site").value;
+var filtercreative = document.getElementById("creative").value;
+filtercreative = filtercreative.replace(/[,]/g,"','");
+var filterpcode = document.getElementById("pcode").value;
+var filterpostal = document.getElementById("postal").value;
+filterpostal = filterpostal.replace(/[,]/g,"','");
+var filtercity = document.getElementById("city").value;
+filtercity = filtercity.replace(/[,]/g,"','");
+var filterdma = document.getElementById("dma").value;
+var filterregion = document.getElementById("region").value;
+filterregion = filterregion.replace(/[,]/g,"','");
+var filtercountry = document.getElementById("country").value;
+filtercountry = filtercountry.replace(/[,]/g,"','");
+
+
+		if(filtercampaign !== ""){
+					   var fcampaign = " campaign = '"+filtercampaign+"'\n"
+					   }
+		if(filterlineitem !== ""){
+					   var flineitem = " lineitem like '%"+filterlineitem+"%'\n"
+					   }
+		if(filtercreative !== ""){
+					   var fcreative = " creative in ('"+filtercreative+"')\n"
+					   }
+		if(filterpcode !== ""){
+					   var fpcode = " qAccount = '"+filterpcode+"'\n"
+					   }
+		if(filterpostal !== ""){
+					   var fpostal = " pc in ('"+filterpostal+"')\n"
+					   }
+		if(filtercity !== ""){
+					   var fcity = " city in ('"+filtercity+"')\n"
+					   }
+		if(filterdma !== ""){
+					   var fdma = " dma in ("+filterdma+")\n"
+					   }
+		if(filterregion !== ""){
+					   var fregion = " region in ('"+filterregion+"')\n"
+					   }
+		if(filtercountry !== ""){
+					   var fcountry = " country in ('"+filtercountry+"')\n"
+					   }
+		if(filtersite !== ""){
+					   var fsite = " publisher like '%"+filtersite+"%'\n"
+					   }
+
+
+		 //get time option
+		 var timeSelected = document.getElementById('time');
+		 var timeSelected = timeSelected.options[time.selectedIndex].value;
+		 var startDate = document.getElementById('from').value.split('/');
+		 var endDate = document.getElementById('to').value.split('/');
+		 console.log(timeSelected);
+		 if (timeSelected == "custom"){
+		 	var dateRange = 's'+startDate[2]+startDate[0]+startDate[1]+'.e'+endDate[2]+endDate[0]+endDate[1];
+			}else {
+			var dateRange = timeSelected;
+			}
+			console.log(dateRange);
+
+
+		//column to appear in query
+		if (document.getElementById('columndate').checked){
+		var qsqlcolumndate = "formattime(eventtime) as date\n";
+		console.log(qsqlcolumndate);
+		};
+
+  		if (document.getElementById('columnts').checked){
+		var qsqlcolumntime = "date as Time\n";
+		console.log(qsqlcolumntime);
+		};
+		if (document.getElementById('columncreative').checked){
+		var qsqlcolumncreative = "creative\n";
+		console.log(qsqlcolumncreative);
+		};
+
+		if (document.getElementById('columncamp').checked){
+		var qsqlcolumncamp = "campaign\n";
+		console.log(qsqlcolumncamp);
+		};
+
+		if (document.getElementById('columnlt').checked){
+		var qsqlcolumnlt = "lineitem\n";
+		console.log(qsqlcolumnlt);
+		};
+
+		if (document.getElementById('columnexech').checked){
+		var qsqlcolumnexech = "exchange\n";
+		console.log(qsqlcolumnexech);
+		};
+		if (document.getElementById('columnsite').checked){
+		var qsqlcolumnsite = "publisher as site\n";
+		console.log(qsqlcolumnsite);
+		};
+
+		if (document.getElementById('columnpc').checked){
+		var qsqlcolumnpostal = "pc as postalCode\n";
+		console.log(qsqlcolumnpostal);
+		};
+		if (document.getElementById('columncity').checked){
+		var qsqlcolumncity = "city\n";
+		console.log(qsqlcolumncity);
+		};
+
+		if (document.getElementById('columndma').checked){
+		var qsqlcolumndma = "dma\n";
+		console.log(qsqlcolumndma);
+		};
+
+		if (document.getElementById('columnregion').checked){
+		var qsqlcolumnregion = "region\n";
+		console.log(qsqlcolumnregion);
+		};
+
+		if (document.getElementById('columnc').checked){
+		var qsqlcolumncountry = "country\n";
+		console.log(qsqlcolumncountry);
+		};
+
+
+
+		if (document.getElementById('columnimp').checked){
+		var qsqlcolumnimp = "SUM(impressions) AS impressions\n";
+		console.log(qsqlcolumnimp);
+		};
+
+		if (document.getElementById('columnclick').checked){
+		var qsqlcolumnclick = "SUM(clicks) AS clicks\n";
+		console.log(qsqlcolumnclick);
+		};
+
+		if (document.getElementById('columnvt').checked){
+		var qsqlcolumnvt = "SUM(viewconversions) AS viewconversions\n";
+		console.log(qsqlcolumnvt);
+		};
+
+		if (document.getElementById('columnct').checked){
+		var qsqlcolumnct = "SUM(clickconversions) AS clickconversions\n";
+		console.log(qsqlcolumnct);
+		};
+
+		if (document.getElementById('columnconversion').checked){
+		var qsqlcolumnconversion = "SUM(clickconversions + viewconversions) AS allconversions\n";
+		console.log(qsqlcolumnconversion);
+		};
+		if (document.getElementById('columnip').checked){
+		var qsqlcolumnip = "ip\n";
+		console.log(qsqlcolumnip);
+		};
+		if (document.getElementById('columnua').checked){
+		var qsqlcolumnua = "userAgent\n";
+		console.log(qsqlcolumnua);
+		};
+
+
+		var columnArray = [qsqlcolumndate,qsqlcolumntime,qsqlcolumncamp,qsqlcolumnlt,qsqlcolumncreative,qsqlcolumnexech,qsqlcolumnsite,qsqlcolumnip,qsqlcolumnua,qsqlcolumnpostal,qsqlcolumncity,qsqlcolumndma,qsqlcolumnregion,qsqlcolumncountry,qsqlcolumnimp,qsqlcolumnclick,qsqlcolumnvt,qsqlcolumnct,qsqlcolumnconversion];
+		var columnArray2 = columnArray.filter(Boolean).join();
+		console.log(columnArray);
+
+		//filters
+		var fitlerArray = [fpcode,fcampaign,flineitem,fcreative,fpostal,fcity,fdma,fregion,fcountry,fsite];
+		var fitlerArray = fitlerArray.filter(Boolean).join("AND ");
+		console.log(fitlerArray);
+
+		//groupby
+		var groupArray = [qsqlcolumndate,qsqlcolumntime,qsqlcolumncamp,qsqlcolumnlt,qsqlcolumncreative,qsqlcolumnexech,qsqlcolumnsite,qsqlcolumnip,qsqlcolumnua,qsqlcolumnpostal,qsqlcolumncity,qsqlcolumndma,qsqlcolumnregion,qsqlcolumncountry];
+		var groupArray = groupArray.filter(Boolean);
+		var group="";
+		console.log(groupArray.length)
+		for (i = 1; i < groupArray.length+1; i++) {
+    	group +=  i+"," ;
+		}
+		group = group.slice(0,-1)
+
+
+
+		//write query in box
+		var qsqlquery = "SELECT\n"+columnArray2;
+		qsqlquery+="FROM prod_drilldown_adtrain_lowest_granularity."+dateRange;
+		qsqlquery+="\nWHERE "+fitlerArray
+		qsqlquery+="GROUP BY "+group
+		qsqlquery+="\n;"
+
+		document.getElementById("query").textContent=qsqlquery;
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
